@@ -51,6 +51,7 @@ class Product(BaseModel):
     supplier = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name=_("Supplier"))
     manucaturer = models.CharField(max_length=255, verbose_name=_("Manacuater"))
     brand = models.CharField(max_length=255, verbose_name=_("Brand"))
+    company = models.ForeignKey(Company, on_delete=models.CASCADE, verbose_name=_("Company"))
     condition = models.CharField(max_length=255, choices=CONDITION, verbose_name=_("Condition"), default="new")
     view_count = models.IntegerField(default=0, verbose_name=_("View Count"))
 

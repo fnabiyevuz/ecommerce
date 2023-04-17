@@ -6,7 +6,7 @@ from .models import Account, UserProfile
 
 
 class AccountUserAdmin(UserAdmin):
-    list_display = ("username", "email", "phone_number", "is_staff", "is_active")
+    list_display = ("id", "username", "email", "phone_number", "is_staff", "is_active")
     list_filter = ("is_staff", "is_active")
     list_display_links = ("username", "email", "phone_number")
     readonly_fields = ("date_joined", "last_login")
