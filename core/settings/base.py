@@ -42,6 +42,10 @@ CUSTOM_APPS = [
     "apps.common",
     "apps.account",
     "apps.product",
+    "apps.cart",
+    "apps.chat",
+    "apps.order",
+    "apps.wish",
 ]
 
 THIRD_PARTY_APPS = [
