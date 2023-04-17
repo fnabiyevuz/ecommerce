@@ -2,6 +2,7 @@ import os
 from datetime import timedelta
 from pathlib import Path
 
+from django.utils.translation import gettext_lazy as _
 from environs import Env
 
 from core.jazzmin_conf import *  # noqa
@@ -53,6 +54,7 @@ THIRD_PARTY_APPS = [
     "rest_framework",
     "rest_framework_simplejwt",
     "import_export",
+    "rosetta",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + CUSTOM_APPS + THIRD_PARTY_APPS
@@ -151,6 +153,24 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Custom Auth User model
 AUTH_USER_MODEL = "account.Account"
+
+MODELTRANSLATION_DEFAULT_LANGUAGE = "en"
+MODELTRANSLATION_LANGUAGES = ("en", "uz", "ru")
+MODELTRANSLATION_FALLBACK_LANGUAGES = {
+    "default": ("en", "uz", "ru"),
+    "uz": ("en", "ru"),
+    "ru": ("en", "uz"),
+}
+MODELTRANSLATION_LANGUAGES_CHOICES = (
+    ("en", _("English")),
+    ("ru", _("Russian")),
+    ("uz", _("Uzbek")),
+)
+LANGUAGES = (
+    ("en", _("English")),
+    ("ru", _("Russian")),
+    ("uz", _("Uzbek")),
+)
 
 
 auth_list = [
