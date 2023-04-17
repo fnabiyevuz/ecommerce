@@ -2,6 +2,7 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from phonenumber_field.modelfields import PhoneNumberField
+from rest_framework_simplejwt.tokens import RefreshToken
 
 from .manager import AccoutManager
 
@@ -33,6 +34,12 @@ class Account(AbstractBaseUser, PermissionsMixin):
 
     def has_module_perms(self, app_label):
         return True
+
+    @property
+    def tokens(self):
+        refresh = RefreshToken.for_user(self)
+        data = {"refresh": str(refresh), "access": str(refresh.access_token)}
+        return data
 
     class Meta:
         verbose_name = _("Account")

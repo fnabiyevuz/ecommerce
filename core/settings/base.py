@@ -50,6 +50,8 @@ CUSTOM_APPS = [
 
 THIRD_PARTY_APPS = [
     "drf_yasg",
+    "rest_framework",
+    "rest_framework_simplejwt",
     "import_export",
 ]
 
@@ -84,6 +86,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "core.wsgi.application"
+IEW_COUNT_MIN_VIEW_PERIOD = 60 * 60 * 2  # 2 hours
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
