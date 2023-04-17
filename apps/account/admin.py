@@ -1,7 +1,8 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import Account, UserProfile
 from django.utils.html import format_html
+
+from .models import Account, UserProfile
 
 
 class AccountUserAdmin(UserAdmin):

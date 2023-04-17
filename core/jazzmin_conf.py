@@ -23,7 +23,9 @@ JAZZMIN_SETTINGS = {
     "copyright": "Default copyright",
     # List of model admins to search from the search bar, search bar omitted if excluded.
     # If you want to use a single search field you don't need to use a list, you can use a simple string
-    "search_model": ["account.CustomUser", ],
+    "search_model": [
+        "account.CustomUser",
+    ],
     # Field name on user model that contains avatar ImageField/URLField/Char_field or a callable that receives the user
     "user_avatar": None,
     ############

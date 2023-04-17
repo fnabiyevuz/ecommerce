@@ -1,15 +1,15 @@
-from django.contrib.auth.models import AbstractBaseUser
+from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.db import models
-from .manager import AccoutManager
-from phonenumber_field.modelfields import PhoneNumberField
-from django.contrib.auth.models import PermissionsMixin
 from django.utils.translation import gettext_lazy as _
+from phonenumber_field.modelfields import PhoneNumberField
+
+from .manager import AccoutManager
 
 
 class Account(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(verbose_name="email", max_length=60, unique=True, db_index=True, blank=True, null=True)
     username = models.CharField(max_length=30, unique=True, verbose_name="username")
-    phone_number = PhoneNumberField(region="UZ", unique=True, verbose_name= "phone number")
+    phone_number = PhoneNumberField(region="UZ", unique=True, verbose_name="phone number")
     firstname = models.CharField(max_length=30, blank=True, null=True, verbose_name="firstname")
 
     # required
