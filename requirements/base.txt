@@ -8,8 +8,5 @@ Pillow==9.5.0
 psycopg2-binary==2.9.1
 django-jazzmin==2.6.0
 djangorestframework-simplejwt==5.2.2
-pre-commit==3.2.2
 django-admin-thumbnails==0.2.6
 django-import_export === 3.2.0
-
-
