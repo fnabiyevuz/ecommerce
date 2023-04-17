@@ -7,7 +7,7 @@ from .schema import swagger_urlpatterns
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/v1/', include('apps.urls')),  # entry point to other project app urls
+    path('api/v1/', include('apps.urls')),  #
 ]
 urlpatterns += swagger_urlpatterns
 if settings.DEBUG:
