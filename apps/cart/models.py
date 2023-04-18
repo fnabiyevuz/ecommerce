@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils.translation import gettext as _
 
+from apps.cart.choices import CartStatusType
 from apps.common.models import BaseModel
 
 
@@ -23,6 +24,8 @@ class CartItem(BaseModel):
                                 related_name='product_items')
     quantity = models.PositiveIntegerField(verbose_name=_("Quantity"), default=1)
     price = models.DecimalField(verbose_name=_("Price"), max_digits=12, decimal_places=2, default=0)
+    status = models.CharField(verbose_name=_("Cart status type"), max_length=10,
+                                choices=CartStatusType.choices, default=CartStatusType.NEW)
 
     def __str__(self):
         return f"{str(self.cart.id)}-cart {self.product.name} | {self.quantity} * {self.price}"

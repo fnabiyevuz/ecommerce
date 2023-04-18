@@ -26,7 +26,7 @@ class Account(AbstractBaseUser, PermissionsMixin):
     objects = AccoutManager()
 
     def __str__(self):
-        return str(self.username)
+        return str(self.username) if self.username else str(self.phone_number)
 
     def has_perm(self, perm, obj=None):
         return self.is_admin
