@@ -5,7 +5,7 @@ from django.utils.translation import gettext_lazy as _
 
 from apps.common.models import BaseModel
 
-from .choisen import CONDITION
+from .choisen import CONDITION, CurrencyType
 
 User = get_user_model()
 
@@ -17,6 +17,10 @@ class Category(BaseModel):
 
     def __str__(self):
         return self.name
+
+    class Meta:
+        verbose_name = _("Category")
+        verbose_name_plural = _("Categories")
 
 
 class Company(BaseModel):
@@ -40,16 +44,18 @@ class Product(BaseModel):
     description = models.TextField(verbose_name=_("Description"))
     quantity = models.IntegerField(verbose_name=_("Quantity"))
     rating = models.FloatField(verbose_name=_("Rate"))
-    curency = models.CharField(max_length=255, verbose_name=_("Curency"))
+    currency = models.CharField(verbose_name=_("Currency type"), max_length=5,
+                                choices=CurrencyType.choices, default=CurrencyType.UZS)
     price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name=_("Price"))
+    discount_price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name=_("Discount price"), default=0)
     type = models.CharField(max_length=255, verbose_name=_("Type"))
     material = models.CharField(max_length=255, verbose_name=_("Material"))
     design = models.CharField(max_length=255, verbose_name=_("Design"))
-    customisation = models.CharField(max_length=255, verbose_name=_("Customisation"))
+    customization = models.CharField(max_length=255, verbose_name=_("Customization"))
     protection = models.CharField(max_length=255, verbose_name=_("Protection"))
     warranty = models.CharField(max_length=255, verbose_name=_("Warranty"))
     supplier = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name=_("Supplier"))
-    manucaturer = models.CharField(max_length=255, verbose_name=_("Manacuater"))
+    manufacturer = models.CharField(max_length=255, verbose_name=_("Manufacturer"))
     brand = models.CharField(max_length=255, verbose_name=_("Brand"))
     company = models.ForeignKey(Company, on_delete=models.CASCADE, verbose_name=_("Company"))
     condition = models.CharField(max_length=255, choices=CONDITION, verbose_name=_("Condition"), default="new")
