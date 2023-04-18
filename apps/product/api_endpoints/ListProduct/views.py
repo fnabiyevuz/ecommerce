@@ -5,12 +5,14 @@ from rest_framework.permissions import IsAuthenticated
 
 from apps.product.models import Product
 
-from .serializers import ProductSerializer
+from .serializers import ProductListSerializer
 
 
 class ListProductView(generics.ListAPIView):
+    """Filter products by name, category, parent category"""
+
     queryset = Product.objects.all()
-    serializer_class = ProductSerializer
+    serializer_class = ProductListSerializer
     filter_backends = (DjangoFilterBackend, SearchFilter)
-    search_fields = ("title",)
+    search_fields = ("name", "category__name", "category__parent__name")
     permission_classes = [IsAuthenticated]
