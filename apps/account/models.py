@@ -4,7 +4,7 @@ from django.utils.translation import gettext_lazy as _
 from phonenumber_field.modelfields import PhoneNumberField
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from .manager import AccoutManager
+from .manager import AccountManager
 
 
 class Account(AbstractBaseUser, PermissionsMixin):
@@ -24,16 +24,16 @@ class Account(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = "phone_number"
     REQUIRED_FIELDS = ["username", "firstname"]
 
-    objects = AccoutManager()
+    objects = AccountManager()
 
     def __str__(self):
         return str(self.username) if self.username else str(self.phone_number)
 
-    def has_perm(self, perm, obj=None):
-        return self.is_admin
-
     def has_module_perms(self, app_label):
-        return True
+        return self.is_superuser
+
+    def has_perm(self, perm, obj=None):
+        return self.is_superuser
 
     @property
     def tokens(self):

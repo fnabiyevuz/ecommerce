@@ -4,12 +4,12 @@ from apps.account.models import Account
 
 
 class RegisterSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(min_length=6, max_length=128, write_only=True)
-    password2 = serializers.CharField(min_length=6, max_length=128, write_only=True)
+    password = serializers.CharField(min_length=6, max_length=68, write_only=True)
+    password2 = serializers.CharField(min_length=6, max_length=68, write_only=True)
 
     class Meta:
         model = Account
-        fields = ("id", "username", "firstname", "phone_number", "password", "password2")
+        fields = ("username", "firstname", "phone_number", "password", "password2")
 
     def validate(self, attrs):
         password = attrs.get("password")

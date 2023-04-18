@@ -6,29 +6,32 @@ from apps.account.models import Account
 
 
 class LoginSerializer(serializers.ModelSerializer):
-    username = serializers.CharField(max_length=100, required=True)
+    # username = serializers.CharField(max_length=100, required=True)
+    phone_number = serializers.CharField(max_length=100, required=True)
     password = serializers.CharField(max_length=68, write_only=True)
     tokens = serializers.SerializerMethodField(read_only=True)
 
     def get_tokens(self, obj):
-        username = obj.get("username")
-        tokens = Account.objects.get(username=username).tokens
+        phone_number = obj.get("phone_number")
+        tokens = Account.objects.get(phone_number=phone_number).tokens
         return tokens
 
     class Meta:
         model = Account
-        fields = ("username", "tokens", "password")
+        fields = ("phone_number", "tokens", "password")
 
     def validate(self, attrs):
-        username = attrs.get("username")
+        phone_number = attrs.get("phone_number")
+        print(phone_number)
         password = attrs.get("password")
-        user = authenticate(username=username, password=password)
+        user = authenticate(phone_number=phone_number, password=password)
+        print(user)
         if not user:
-            raise AuthenticationFailed({"message": "Username or password is not correct"})
+            raise AuthenticationFailed({"message": "Phone number or password is not correct"})
         if not user.is_active:
             raise AuthenticationFailed({"message": "Account disabled"})
 
         data = {
-            "username": user.username,
+            "phone_number": user.phone_number,
         }
         return data
