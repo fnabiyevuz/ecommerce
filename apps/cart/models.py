@@ -9,9 +9,11 @@ class Cart(BaseModel):
     user = models.ForeignKey('account.Account', verbose_name=_("User"), on_delete=models.CASCADE,
                              related_name='user_cart', blank=True, null=True)
     session_key = models.CharField(verbose_name=_("Session key"), max_length=255, blank=True, null=True, unique=True)
+    status = models.CharField(verbose_name=_("Cart status"), max_length=10,
+                              choices=CartStatusType.choices, default=CartStatusType.NEW)
 
     def __str__(self):
-        return f"{str(self.id)}-cart {self.user.username}"
+        return f"{str(self.id)}-cart {self.user}"
 
     class Meta:
         verbose_name = "Cart"
@@ -24,12 +26,11 @@ class CartItem(BaseModel):
                                 related_name='product_items')
     quantity = models.PositiveIntegerField(verbose_name=_("Quantity"), default=1)
     price = models.DecimalField(verbose_name=_("Price"), max_digits=12, decimal_places=2, default=0)
-    status = models.CharField(verbose_name=_("Cart status type"), max_length=10,
-                                choices=CartStatusType.choices, default=CartStatusType.NEW)
 
     def __str__(self):
         return f"{str(self.cart.id)}-cart {self.product.name} | {self.quantity} * {self.price}"
 
     class Meta:
-        verbose_name = "Cart"
-        verbose_name_plural = "Carts"
+        verbose_name = "Cart Item"
+        verbose_name_plural = "Cart Items"
+        unique_together = ('cart', 'product')
