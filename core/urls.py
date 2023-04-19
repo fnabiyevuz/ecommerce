@@ -10,6 +10,7 @@ from django.urls import include, path, re_path
 from rest_framework_simplejwt.views import (TokenObtainPairView,
                                             TokenRefreshView)
 
+
 from .schema import swagger_urlpatterns
 
 
@@ -25,7 +26,7 @@ class LoginForm(AuthenticationForm):
 
 
 # admin.site.login_form = LoginForm
-# admin.site.login_template = "login.html"
+admin.site.login_template = "admin/login.html"
 
 
 urlpatterns = [

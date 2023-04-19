@@ -1,18 +1,49 @@
-from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import generics
-from rest_framework.filters import SearchFilter
-from rest_framework.permissions import IsAuthenticated
+from django.db.models import Q
+from django_filters import rest_framework as django_filters
+from rest_framework import filters, generics
 
-from apps.product.models import Product
+from apps.product.models import Category, Product
 
-from .serializers import ProductListSerializer
+from .serializers import CategorySerializer, ProductListSerializer
+
+
+class ProductFilter(django_filters.FilterSet):
+    brand = django_filters.CharFilter(field_name="brand")
+    price_from = django_filters.NumberFilter(field_name="price", lookup_expr="gte")
+    price_to = django_filters.NumberFilter(field_name="price", lookup_expr="lte")
+    rating_from = django_filters.NumberFilter(field_name="rating", lookup_expr="gte")
+    rating_to = django_filters.NumberFilter(field_name="rating", lookup_expr="lte")
+    features = django_filters.CharFilter(method="filter_features")
+
+    def filter_features(self, queryset, name, value):
+        features = value.split(",")
+        for feature in features:
+            queryset = queryset.filter(
+                Q(type__icontains=feature)
+                | Q(material__icontains=feature)
+                | Q(design__icontains=feature)
+                | Q(customization__icontains=feature)
+                | Q(protection__icontains=feature)
+                | Q(warranty__icontains=feature)
+                | Q(manufacturer__icontains=feature)
+            )
+        return queryset
+
+    class Meta:
+        model = Product
+        fields = ["brand", "price_from", "price_to", "rating_from", "rating_to", "features"]
 
 
 class ListProductView(generics.ListAPIView):
-    """Filter products by name, category, parent category"""
-
     queryset = Product.objects.all()
     serializer_class = ProductListSerializer
-    filter_backends = (DjangoFilterBackend, SearchFilter)
-    search_fields = ("name", "category__name", "category__parent__name")
-    permission_classes = [IsAuthenticated]
+    filter_backends = [django_filters.DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    filterset_class = ProductFilter
+    search_fields = ["name", "description", "manufacturer", "brand"]
+    ordering_fields = ["name", "price", "rating"]
+
+
+class ListCategoryView(generics.ListAPIView):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+    search_fields = ["name"]
