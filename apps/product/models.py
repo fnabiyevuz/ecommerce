@@ -5,12 +5,11 @@ from django.db.models import Avg, Count
 from django.utils.translation import gettext_lazy as _
 
 from apps.common.models import BaseModel
-from core import settings
 
-from ..account.models import Account
+# from apps.account.models import Account
 from .choisen import CONDITION, CurrencyType
 
-User = get_user_model()
+# User = get_user_model()
 
 
 class Category(BaseModel):
@@ -58,7 +57,7 @@ class Product(BaseModel):
     customization = models.CharField(max_length=255, verbose_name=_("Customization"))
     protection = models.CharField(max_length=255, verbose_name=_("Protection"))
     warranty = models.CharField(max_length=255, verbose_name=_("Warranty"))
-    supplier = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name=_("Supplier"))
+    supplier = models.OneToOneField("account.Account", on_delete=models.CASCADE, verbose_name=_("Supplier"))
     manufacturer = models.CharField(max_length=255, verbose_name=_("Manufacturer"))
     brand = models.CharField(max_length=255, verbose_name=_("Brand"))
     company = models.ForeignKey(Company, on_delete=models.CASCADE, verbose_name=_("Company"))
@@ -101,7 +100,7 @@ class ProductImage(BaseModel):
 
 
 class Review(BaseModel):
-    user = models.ForeignKey(Account, on_delete=models.CASCADE)
+    user = models.OneToOneField("account.Account", on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="reviews")
     desc = models.TextField(verbose_name=_("Description"))
     status = models.BooleanField(default=False)
