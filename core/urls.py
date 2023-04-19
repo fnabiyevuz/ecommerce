@@ -33,8 +33,8 @@ urlpatterns = [
     re_path(r"^rosetta/", include("rosetta.urls")),
     path("admin/", admin.site.urls),
     path("api/v1/", include("apps.urls")),
-    path("api/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
-    path("api/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
+    # path("api/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
+    # path("api/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
 ]
 
 urlpatterns += [path("i18n/", include("django.conf.urls.i18n"))]
