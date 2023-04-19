@@ -1,10 +1,11 @@
+from drf_yasg.utils import swagger_auto_schema
 from rest_framework import generics, status
 from rest_framework.response import Response
 
 from apps.cart.api_endpoints.cartitem.CartItemUpdate.serializers import \
     CartItemUpdateSerializer
-from apps.cart.models import Cart, CartItem
-from apps.common.utils import get_session_key
+from apps.cart.models import CartItem
+from apps.common.utils import get_cart
 
 
 class CartItemUpdateAPIView(generics.UpdateAPIView):
@@ -15,11 +16,9 @@ class CartItemUpdateAPIView(generics.UpdateAPIView):
         Update a model instance.
     """
 
+    @swagger_auto_schema(request_body=CartItemUpdateSerializer)
     def update(self, request, *args, **kwargs):
-        if request.user.is_authenticated:
-            cart = Cart.objects.get(user=request.user)
-        else:
-            cart = Cart.objects.get(session_key=get_session_key(request))
+        cart = get_cart(request)
         partial = kwargs.pop("partial", False)
         instance = self.get_object()
         if instance.cart == cart:

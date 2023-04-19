@@ -1,10 +1,9 @@
 from rest_framework import generics, status
 from rest_framework.response import Response
 
-from apps.cart.api_endpoints.cartitem.CartItemDelete.serializers import \
-    CartItemDeleteSerializer
-from apps.cart.models import Cart, CartItem
-from apps.common.utils import get_session_key
+from apps.cart.api_endpoints.cartitem.CartItemDelete.serializers import CartItemDeleteSerializer
+from apps.cart.models import CartItem
+from apps.common.utils import get_cart
 
 
 class CartItemDeleteAPIView(generics.DestroyAPIView):
@@ -16,10 +15,7 @@ class CartItemDeleteAPIView(generics.DestroyAPIView):
     """
 
     def destroy(self, request, *args, **kwargs):
-        if request.user.is_authenticated:
-            cart = Cart.objects.get(user=request.user)
-        else:
-            cart = Cart.objects.get(session_key=get_session_key(request))
+        cart = get_cart(request)
         instance = self.get_object()
         if instance.cart == cart:
             self.perform_destroy(instance)

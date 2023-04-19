@@ -1,15 +1,14 @@
 from rest_framework import generics, status
 from rest_framework.response import Response
 
-from apps.cart.api_endpoints.cartitem.CartItemCreate.serializers import \
-    CartItemCreateSerializer
-from apps.cart.choices import CartStatusType
-from apps.cart.models import Cart, CartItem
-from apps.common.utils import get_session_key
+from apps.cart.api_endpoints.cartitem.CartItemCreate.serializers import (
+    CartItemCreateSerializer, CartItemCreateShortSerializer)
+from apps.cart.models import CartItem
+from apps.common.utils import get_cart
 
 
 class CartItemCreateAPIView(generics.CreateAPIView):
-    serializer_class = CartItemCreateSerializer
+    serializer_class = CartItemCreateShortSerializer
     queryset = CartItem.objects.all()
 
     """
@@ -17,13 +16,9 @@ class CartItemCreateAPIView(generics.CreateAPIView):
     """
 
     def create(self, request, *args, **kwargs):
-
-        if request.user.is_authenticated:
-            cart, _ = Cart.objects.get_or_create(user=request.user, status=CartStatusType.NEW)
-        else:
-            cart, _ = Cart.objects.get_or_create(session_key=get_session_key(request))
-        request.data["cart"] = cart.id
-        serializer = self.get_serializer(data=request.data)
+        cart = get_cart(request)
+        request.data["cart"] = cart
+        serializer = CartItemCreateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)

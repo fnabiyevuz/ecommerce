@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import F, Sum
 from django.utils.translation import gettext as _
 
 from apps.cart.choices import CartStatusType
@@ -19,6 +20,10 @@ class Cart(BaseModel):
         verbose_name=_("Cart status"), max_length=10, choices=CartStatusType.choices, default=CartStatusType.NEW
     )
 
+    @property
+    def total(self):
+        return self.cart_items.all().aggregate(total=Sum(F("price") * F("quantity")))["total"] or 0
+
     def __str__(self):
         return f"{str(self.id)}-cart {self.user}"
 
@@ -37,6 +42,14 @@ class CartItem(BaseModel):
 
     def __str__(self):
         return f"{str(self.cart.id)}-cart {self.product.name} | {self.quantity} * {self.price}"
+
+    def save(self, *args, **kwargs):
+        if self.price == 0:
+            if self.product.discount_price:
+                self.price = self.product.discount_price
+            else:
+                self.price = self.product.price
+        super(CartItem, self).save(*args, **kwargs)
 
     class Meta:
         verbose_name = "Cart Item"

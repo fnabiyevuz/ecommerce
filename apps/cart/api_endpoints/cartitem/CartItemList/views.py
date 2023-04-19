@@ -3,8 +3,8 @@ from rest_framework.response import Response
 
 from apps.cart.api_endpoints.cartitem.CartItemList.serializers import \
     CartItemListSerializer
-from apps.cart.models import Cart, CartItem
-from apps.common.utils import get_session_key
+from apps.cart.models import CartItem
+from apps.common.utils import get_cart
 
 
 class CartItemListAPIView(generics.ListAPIView):
@@ -16,10 +16,7 @@ class CartItemListAPIView(generics.ListAPIView):
     """
 
     def list(self, request, *args, **kwargs):
-        if request.user.is_authenticated:
-            cart, _ = Cart.objects.get_or_create(user=request.user)
-        else:
-            cart, _ = Cart.objects.get_or_create(session_key=get_session_key(request))
+        cart = get_cart(request)
         queryset = cart.cart_items.all()
 
         page = self.paginate_queryset(queryset)
