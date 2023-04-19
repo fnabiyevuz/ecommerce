@@ -1,7 +1,8 @@
 from rest_framework import generics, status
 from rest_framework.response import Response
 
-from apps.cart.api_endpoints.cartitem.CartItemDelete.serializers import CartItemDeleteSerializer
+from apps.cart.api_endpoints.cartitem.CartItemDelete.serializers import \
+    CartItemDeleteSerializer
 from apps.cart.models import CartItem
 from apps.common.utils import get_cart
 

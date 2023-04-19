@@ -10,7 +10,6 @@ from django.urls import include, path, re_path
 from rest_framework_simplejwt.views import (TokenObtainPairView,
                                             TokenRefreshView)
 
-
 from .schema import swagger_urlpatterns
 
 
