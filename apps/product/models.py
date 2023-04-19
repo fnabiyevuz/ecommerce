@@ -74,6 +74,10 @@ class Product(BaseModel):
         reviews = self.reviews.filter(status=True).aggregate(count=Count("rating"))
         return reviews["count"]
 
+    @property
+    def count_all_product(self):
+        return Product.objects.all().count()
+
     class Meta:
         verbose_name = _("Product")
         verbose_name_plural = _("Products")
