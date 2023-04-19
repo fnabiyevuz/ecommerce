@@ -6,4 +6,4 @@ from apps.cart.models import CartItem
 class CartItemUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = CartItem
-        fields = ('id', 'cart', 'product')
+        fields = ("id", "cart", "product")

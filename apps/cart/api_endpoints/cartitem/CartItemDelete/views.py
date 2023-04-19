@@ -1,9 +1,10 @@
 from rest_framework import generics, status
 from rest_framework.response import Response
 
-from apps.common.utils import get_session_key
-from apps.cart.api_endpoints.cartitem.CartItemDelete.serializers import CartItemDeleteSerializer
+from apps.cart.api_endpoints.cartitem.CartItemDelete.serializers import \
+    CartItemDeleteSerializer
 from apps.cart.models import Cart, CartItem
+from apps.common.utils import get_session_key
 
 
 class CartItemDeleteAPIView(generics.DestroyAPIView):
@@ -25,4 +26,4 @@ class CartItemDeleteAPIView(generics.DestroyAPIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-__all__ = ['CartItemDeleteAPIView']
+__all__ = ["CartItemDeleteAPIView"]

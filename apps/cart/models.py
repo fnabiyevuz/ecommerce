@@ -6,11 +6,18 @@ from apps.common.models import BaseModel
 
 
 class Cart(BaseModel):
-    user = models.ForeignKey('account.Account', verbose_name=_("User"), on_delete=models.CASCADE,
-                             related_name='user_cart', blank=True, null=True)
+    user = models.ForeignKey(
+        "account.Account",
+        verbose_name=_("User"),
+        on_delete=models.CASCADE,
+        related_name="user_cart",
+        blank=True,
+        null=True,
+    )
     session_key = models.CharField(verbose_name=_("Session key"), max_length=255, blank=True, null=True, unique=True)
-    status = models.CharField(verbose_name=_("Cart status"), max_length=10,
-                              choices=CartStatusType.choices, default=CartStatusType.NEW)
+    status = models.CharField(
+        verbose_name=_("Cart status"), max_length=10, choices=CartStatusType.choices, default=CartStatusType.NEW
+    )
 
     def __str__(self):
         return f"{str(self.id)}-cart {self.user}"
@@ -21,9 +28,10 @@ class Cart(BaseModel):
 
 
 class CartItem(BaseModel):
-    cart = models.ForeignKey(Cart, verbose_name=_("Cart"), on_delete=models.CASCADE, related_name='cart_items')
-    product = models.ForeignKey('product.Product', verbose_name=_("Product"), on_delete=models.CASCADE,
-                                related_name='product_items')
+    cart = models.ForeignKey(Cart, verbose_name=_("Cart"), on_delete=models.CASCADE, related_name="cart_items")
+    product = models.ForeignKey(
+        "product.Product", verbose_name=_("Product"), on_delete=models.CASCADE, related_name="product_items"
+    )
     quantity = models.PositiveIntegerField(verbose_name=_("Quantity"), default=1)
     price = models.DecimalField(verbose_name=_("Price"), max_digits=12, decimal_places=2, default=0)
 
@@ -33,4 +41,4 @@ class CartItem(BaseModel):
     class Meta:
         verbose_name = "Cart Item"
         verbose_name_plural = "Cart Items"
-        unique_together = ('cart', 'product')
+        unique_together = ("cart", "product")

@@ -1,10 +1,11 @@
 from rest_framework import generics, status
 from rest_framework.response import Response
 
+from apps.cart.api_endpoints.cartitem.CartItemCreate.serializers import \
+    CartItemCreateSerializer
 from apps.cart.choices import CartStatusType
-from apps.common.utils import get_session_key
-from apps.cart.api_endpoints.cartitem.CartItemCreate.serializers import CartItemCreateSerializer
 from apps.cart.models import Cart, CartItem
+from apps.common.utils import get_session_key
 
 
 class CartItemCreateAPIView(generics.CreateAPIView):
@@ -21,7 +22,7 @@ class CartItemCreateAPIView(generics.CreateAPIView):
             cart, _ = Cart.objects.get_or_create(user=request.user, status=CartStatusType.NEW)
         else:
             cart, _ = Cart.objects.get_or_create(session_key=get_session_key(request))
-        request.data['cart'] = cart.id
+        request.data["cart"] = cart.id
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
@@ -29,4 +30,4 @@ class CartItemCreateAPIView(generics.CreateAPIView):
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 
-__all__ = ['CartItemCreateAPIView']
+__all__ = ["CartItemCreateAPIView"]
