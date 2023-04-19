@@ -91,7 +91,8 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "core.wsgi.application"
-IEW_COUNT_MIN_VIEW_PERIOD = 60 * 60 * 2  # 2 hours
+AUTH_USER_MODEL = "account.Account"
+VIEW_COUNT_MIN_VIEW_PERIOD = 60 * 60 * 2
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
@@ -155,7 +156,7 @@ MEDIA_ROOT = BASE_DIR / "media"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Custom Auth User model
-AUTH_USER_MODEL = "account.Account"
+
 
 MODELTRANSLATION_DEFAULT_LANGUAGE = "en"
 MODELTRANSLATION_LANGUAGES = ("en", "uz", "ru")
