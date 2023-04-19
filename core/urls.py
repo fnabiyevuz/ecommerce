@@ -2,12 +2,14 @@ from captcha.fields import ReCaptchaField
 from captcha.widgets import ReCaptchaV2Checkbox
 from django import forms
 from django.conf import settings
-from django.conf.urls.i18n import i18n_patterns
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import redirect
 from django.urls import include, path, re_path
+from rest_framework_simplejwt.views import (TokenObtainPairView,
+                                            TokenRefreshView)
+
 
 from .schema import swagger_urlpatterns
 
@@ -32,8 +34,8 @@ urlpatterns = [
     re_path(r"^rosetta/", include("rosetta.urls")),
     path("admin/", admin.site.urls),
     path("api/v1/", include("apps.urls")),
-    # path("api/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
-    # path("api/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
+    path("api/v1/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
+    path("api/v1/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
 ]
 
 urlpatterns += [path("i18n/", include("django.conf.urls.i18n"))]
