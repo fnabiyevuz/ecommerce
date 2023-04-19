@@ -2,15 +2,16 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from phonenumber_field.modelfields import PhoneNumberField
+from rest_framework_simplejwt.tokens import RefreshToken
 
-from .manager import AccoutManager
+from .manager import AccountManager
 
 
 class Account(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(verbose_name="email", max_length=60, unique=True, db_index=True, blank=True, null=True)
     username = models.CharField(max_length=30, unique=True, verbose_name="username")
     phone_number = PhoneNumberField(region="UZ", unique=True, verbose_name="phone number")
-    firstname = models.CharField(max_length=30, blank=True, null=True, verbose_name="firstname")
+    firstname = models.CharField(max_length=30, blank=True, null=True, verbose_name="Full name")
 
     # required
     date_joined = models.DateTimeField(verbose_name="date joined", auto_now_add=True)
@@ -23,16 +24,22 @@ class Account(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = "phone_number"
     REQUIRED_FIELDS = ["username", "firstname"]
 
-    objects = AccoutManager()
+    objects = AccountManager()
 
     def __str__(self):
         return str(self.username) if self.username else str(self.phone_number)
 
-    def has_perm(self, perm, obj=None):
-        return self.is_admin
-
     def has_module_perms(self, app_label):
-        return True
+        return self.is_superuser
+
+    def has_perm(self, perm, obj=None):
+        return self.is_superuser
+
+    @property
+    def tokens(self):
+        refresh = RefreshToken.for_user(self)
+        data = {"refresh": str(refresh), "access": str(refresh.access_token)}
+        return data
 
     class Meta:
         verbose_name = _("Account")

@@ -44,8 +44,9 @@ class Product(BaseModel):
     description = models.TextField(verbose_name=_("Description"))
     quantity = models.IntegerField(verbose_name=_("Quantity"))
     rating = models.FloatField(verbose_name=_("Rate"))
-    currency = models.CharField(verbose_name=_("Currency type"), max_length=5,
-                                choices=CurrencyType.choices, default=CurrencyType.UZS)
+    currency = models.CharField(
+        verbose_name=_("Currency type"), max_length=5, choices=CurrencyType.choices, default=CurrencyType.UZS
+    )
     price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name=_("Price"))
     discount_price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name=_("Discount price"), default=0)
     type = models.CharField(max_length=255, verbose_name=_("Type"))
@@ -57,18 +58,19 @@ class Product(BaseModel):
     supplier = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name=_("Supplier"))
     manufacturer = models.CharField(max_length=255, verbose_name=_("Manufacturer"))
     brand = models.CharField(max_length=255, verbose_name=_("Brand"))
+    company = models.ForeignKey(Company, on_delete=models.CASCADE, verbose_name=_("Company"))
     condition = models.CharField(max_length=255, choices=CONDITION, verbose_name=_("Condition"), default="new")
     view_count = models.IntegerField(default=0, verbose_name=_("View Count"))
 
-    # @property
-    # def average_rating(self):
-    #     reviews = self.reviews.filter(status=True).aggregate(Avg("rating"))
-    #     return float(reviews["rating__avg"]) if reviews["rating__avg"] else 0
-    #
-    # @property
-    # def get_review_count(self):
-    #     reviews = self.reviews.filter(status=True).aggregate(count=Count("rating"))
-    #     return reviews["count"]
+    @property
+    def average_rating(self):
+        reviews = self.reviews.filter(status=True).aggregate(Avg("rating"))
+        return float(reviews["rating__avg"]) if reviews["rating__avg"] else 0
+
+    @property
+    def get_review_count(self):
+        reviews = self.reviews.filter(status=True).aggregate(count=Count("rating"))
+        return reviews["count"]
 
     class Meta:
         verbose_name = _("Product")

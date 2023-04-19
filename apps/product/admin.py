@@ -18,7 +18,7 @@ class CompanyAdmin(admin.ModelAdmin):
 class CategoryResource(resources.ModelResource):
     class Meta:
         model = Category
-        fields = "__all__"
+        fields = ("id", "name", "slug", "created_at")
         exclude = ("image",)
 
 

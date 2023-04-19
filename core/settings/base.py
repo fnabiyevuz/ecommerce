@@ -2,6 +2,7 @@ import os
 from datetime import timedelta
 from pathlib import Path
 
+from django.utils.translation import gettext_lazy as _
 from environs import Env
 
 from core.jazzmin_conf import *  # noqa
@@ -50,7 +51,12 @@ CUSTOM_APPS = [
 
 THIRD_PARTY_APPS = [
     "drf_yasg",
+    "rest_framework",
+    "rest_framework_simplejwt",
     "import_export",
+    "rosetta",
+    "django_filters",
+    "captcha",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + CUSTOM_APPS + THIRD_PARTY_APPS
@@ -67,10 +73,11 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = "core.urls"
 
+
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [BASE_DIR / "templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -84,6 +91,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "core.wsgi.application"
+IEW_COUNT_MIN_VIEW_PERIOD = 60 * 60 * 2  # 2 hours
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
@@ -149,6 +157,24 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # Custom Auth User model
 AUTH_USER_MODEL = "account.Account"
 
+MODELTRANSLATION_DEFAULT_LANGUAGE = "en"
+MODELTRANSLATION_LANGUAGES = ("en", "uz", "ru")
+MODELTRANSLATION_FALLBACK_LANGUAGES = {
+    "default": ("en", "uz", "ru"),
+    "uz": ("en", "ru"),
+    "ru": ("en", "uz"),
+}
+MODELTRANSLATION_LANGUAGES_CHOICES = (
+    ("en", _("English")),
+    ("ru", _("Russian")),
+    ("uz", _("Uzbek")),
+)
+LANGUAGES = (
+    ("en", _("English")),
+    ("ru", _("Russian")),
+    ("uz", _("Uzbek")),
+)
+
 
 auth_list = [
     "rest_framework_simplejwt.authentication.JWTAuthentication",
@@ -206,3 +232,6 @@ SIMPLE_JWT = {
     "SLIDING_TOKEN_LIFETIME": timedelta(minutes=5),
     "SLIDING_TOKEN_REFRESH_LIFETIME": timedelta(days=1),
 }
+
+RECAPTCHA_PUBLIC_KEY = env.str("RECAPTCHA_PUBLIC_KEY", "6Lc1F3UlAAAAAHYvJDZQonEqKRaZsBfaOo8QKMUH")
+RECAPTCHA_PRIVATE_KEY = env.str("RECAPTCHA_PRIVATE_KEY", "6Lc1F3UlAAAAAAvwHnkWcvkpPlRHl321e-_jYKtN")
