@@ -2,9 +2,10 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.utils.html import format_html
 
-from .models import Account, UserProfile
+from .models import Account, UserProfile, YouLikeProduct
 
 
+@admin.register(Account)
 class AccountUserAdmin(UserAdmin):
     list_display = ("id", "username", "email", "phone_number", "is_staff", "is_active")
     list_filter = ("is_staff", "is_active")
@@ -36,9 +37,7 @@ class AccountUserAdmin(UserAdmin):
     )
 
 
-admin.site.register(Account, AccountUserAdmin)
-
-
+@admin.register(UserProfile)
 class UserProfileAdmin(admin.ModelAdmin):
     list_display = ("thumbnail", "user", "city", "state", "address")
     list_filter = ("city", "state")
@@ -64,4 +63,15 @@ class UserProfileAdmin(admin.ModelAdmin):
     actions = ["set_defult_city"]
 
 
-admin.site.register(UserProfile, UserProfileAdmin)
+@admin.register(YouLikeProduct)
+class YouLikeProductAdmin(admin.ModelAdmin):
+    list_display = ("user", "product")
+    list_filter = ("user", "product")
+    list_display_links = ("user", "product")
+
+    def set_defult_user(self, request, queryset):
+        queryset.update(user=Account.objects.get(username="admin"))
+
+    set_defult_user.short_description = "Set default admin user"
+
+    actions = ["set_defult_user"]

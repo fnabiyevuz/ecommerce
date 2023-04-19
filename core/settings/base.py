@@ -91,7 +91,8 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "core.wsgi.application"
-IEW_COUNT_MIN_VIEW_PERIOD = 60 * 60 * 2  # 2 hours
+AUTH_USER_MODEL = "account.Account"
+VIEW_COUNT_MIN_VIEW_PERIOD = 60 * 60 * 2
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
@@ -155,7 +156,7 @@ MEDIA_ROOT = BASE_DIR / "media"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Custom Auth User model
-AUTH_USER_MODEL = "account.Account"
+
 
 MODELTRANSLATION_DEFAULT_LANGUAGE = "en"
 MODELTRANSLATION_LANGUAGES = ("en", "uz", "ru")
@@ -193,7 +194,7 @@ REST_FRAMEWORK = {
         "rest_framework.parsers.MultiPartParser",
     ],
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
-    "PAGE_SIZE": 5,
+    "PAGE_SIZE": 10,
     "DEFAULT_AUTHENTICATION_CLASSES": auth_list,
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.AllowAny",

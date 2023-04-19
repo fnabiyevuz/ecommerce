@@ -1,13 +1,15 @@
 from django.contrib.auth import get_user_model
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.db.models import Avg, Count
 from django.utils.translation import gettext_lazy as _
 
 from apps.common.models import BaseModel
 
+# from apps.account.models import Account
 from .choisen import CONDITION, CurrencyType
 
-User = get_user_model()
+# User = get_user_model()
 
 
 class Category(BaseModel):
@@ -55,7 +57,7 @@ class Product(BaseModel):
     customization = models.CharField(max_length=255, verbose_name=_("Customization"))
     protection = models.CharField(max_length=255, verbose_name=_("Protection"))
     warranty = models.CharField(max_length=255, verbose_name=_("Warranty"))
-    supplier = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name=_("Supplier"))
+    supplier = models.OneToOneField("account.Account", on_delete=models.CASCADE, verbose_name=_("Supplier"))
     manufacturer = models.CharField(max_length=255, verbose_name=_("Manufacturer"))
     brand = models.CharField(max_length=255, verbose_name=_("Brand"))
     company = models.ForeignKey(Company, on_delete=models.CASCADE, verbose_name=_("Company"))
@@ -71,6 +73,10 @@ class Product(BaseModel):
     def get_review_count(self):
         reviews = self.reviews.filter(status=True).aggregate(count=Count("rating"))
         return reviews["count"]
+
+    @property
+    def count_all_product(self):
+        return Product.objects.all().count()
 
     class Meta:
         verbose_name = _("Product")
@@ -95,3 +101,23 @@ class ProductImage(BaseModel):
 
     def __str__(self):
         return str(self.product)
+
+
+class Review(BaseModel):
+    user = models.OneToOneField("account.Account", on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="reviews")
+    desc = models.TextField(verbose_name=_("Description"))
+    status = models.BooleanField(default=False)
+    ip = models.GenericIPAddressField(blank=True, null=True)
+    rating = models.FloatField(
+        null=True, blank=True, validators=[MinValueValidator(0), MaxValueValidator(5)], default=0
+    )
+    # reply = models.ForeignKey("self", on_delete=models.CASCADE, null=True, blank=True)
+
+    def __str__(self):
+        return str(self.user)
+
+    class Meta:
+        verbose_name = "Review"
+        verbose_name_plural = "Reviews"
+        ordering = ["-created_at"]

@@ -116,7 +116,7 @@ JAZZMIN_SETTINGS = {
         "auth.user": "collapsible",
     },
     # Add a language dropdown into the admin
-    "language_chooser": False,
+    "language_chooser": True,
 }  # type: Dict[str, Any]
 
 JAZZMIN_UI_TWEAKS = {

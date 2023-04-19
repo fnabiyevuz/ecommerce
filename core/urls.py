@@ -25,7 +25,7 @@ class LoginForm(AuthenticationForm):
 
 
 # admin.site.login_form = LoginForm
-# admin.site.login_template = "login.html"
+admin.site.login_template = "admin/login.html"
 
 
 urlpatterns = [

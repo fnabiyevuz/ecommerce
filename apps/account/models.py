@@ -4,6 +4,8 @@ from django.utils.translation import gettext_lazy as _
 from phonenumber_field.modelfields import PhoneNumberField
 from rest_framework_simplejwt.tokens import RefreshToken
 
+from apps.product.models import Product
+
 from .manager import AccountManager
 
 
@@ -63,4 +65,17 @@ class UserProfile(models.Model):
     class Meta:
         verbose_name = _("UserProfile")
         verbose_name_plural = _("UserProfile")
+        ordering = ["-id"]
+
+
+class YouLikeProduct(models.Model):
+    user = models.ForeignKey(Account, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.user} {self.product}"
+
+    class Meta:
+        verbose_name = _("YouLikeCreateProduct")
+        verbose_name_plural = _("YouLikeCreateProduct")
         ordering = ["-id"]

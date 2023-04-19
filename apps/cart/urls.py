@@ -6,6 +6,8 @@ from apps.cart.api_endpoints.cartitem import (CartItemCreateAPIView,
                                               CartItemListAPIView,
                                               CartItemUpdateAPIView)
 
+app_name = "cart"
+
 urlpatterns = [
     path("cart/<int:pk>/detail/", CartDetailAPIView.as_view(), name="cart-detail"),
     path("cartitem/", CartItemCreateAPIView.as_view(), name="cartitem-create"),

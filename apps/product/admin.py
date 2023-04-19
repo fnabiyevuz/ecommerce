@@ -3,7 +3,7 @@ from django.contrib import admin
 from import_export import resources
 from import_export.admin import ImportExportModelAdmin
 
-from .models import Category, Company, Product, ProductImage
+from .models import Category, Company, Product, ProductImage, Review
 
 
 @admin.register(Company)
@@ -38,6 +38,7 @@ class ProductImageModelAdmin(admin.TabularInline):
     extra = 2
 
 
+@admin.register(Product)
 class ProductModelAdmin(admin.ModelAdmin):
     list_display = ("name", "price", "category", "created_at")
     list_filter = ("category", "created_at")
@@ -48,4 +49,10 @@ class ProductModelAdmin(admin.ModelAdmin):
     inlines = [ProductImageModelAdmin]
 
 
-admin.site.register(Product, ProductModelAdmin)
+@admin.register(Review)
+class ReviewModelAdmin(admin.ModelAdmin):
+    list_display = ("user", "desc", "product", "rating")
+    list_filter = ("created_at",)
+    search_fields = ("user", "rating")
+    date_hierarchy = "created_at"
+    list_editable = ("product",)
