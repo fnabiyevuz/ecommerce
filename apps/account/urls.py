@@ -13,5 +13,5 @@ urlpatterns = [
     path("profile-delete/", profile.DeleteProfileView.as_view(), name="profile-delete"),
     path("like-product/<int:product>/", profile.YouLikeProductCreate.as_view(), name="like-product"),
     path("like-product-get/", profile.YouLikeProductGet.as_view(), name="like-product-get"),
-    path('products/like/<int:product>/', ProductDeleteApiView.as_view(), name='product-delete'),
+    path("products/like/<int:product>/", ProductDeleteApiView.as_view(), name="product-delete"),
 ]
