@@ -1,17 +1,19 @@
 from rest_framework import status
-from rest_framework.generics import DestroyAPIView
+from rest_framework import generics
 from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework.generics import get_object_or_404
+from rest_framework.permissions import IsAuthenticated
 
 from apps.account.models import YouLikeProduct
 
-from .serializers import YouLikeProductDeleteSerializer
 
+class ProductDeleteApiView(APIView):
+    permission_classes = (IsAuthenticated,)
 
-class ProductDeleteApiView(DestroyAPIView):
-    queryset = YouLikeProduct.objects.all()
-    serializer_class = YouLikeProductDeleteSerializer
+    lookup_field = "product_id"
 
-    def delete(self, request, *args, **kwargs):
-        instance = self.get_object()
-        self.perform_destroy(instance)
+    def delete(self, request, product_id):
+        saved = get_object_or_404(YouLikeProduct, product_id=product_id, user=request.user)
+        saved.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
