@@ -40,7 +40,7 @@ class ProductImageModelAdmin(admin.TabularInline):
 
 @admin.register(Product)
 class ProductModelAdmin(admin.ModelAdmin):
-    list_display = ("name", "price", "category", "created_at")
+    list_display = ("id", "name", "price", "category", "created_at")
     list_filter = ("category", "created_at")
     search_fields = ("name",)
     date_hierarchy = "created_at"

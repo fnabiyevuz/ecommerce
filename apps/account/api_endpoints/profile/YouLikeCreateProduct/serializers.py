@@ -7,7 +7,7 @@ from apps.product.api_endpoints.ListProduct.serializers import ProductListSerial
 class YouLikeProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = YouLikeProduct
-        fields = ("user", "product")
+        fields = ("user",)
 
     def validate(self, attrs):
         product = attrs.get("product")

@@ -1,21 +1,24 @@
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
-
+from rest_framework.views import APIView
+from rest_framework.generics import get_object_or_404
+from rest_framework import serializers, status
 from apps.account.models import YouLikeProduct
 from apps.product.models import Product
 
 from .serializers import YouLikeProductSerializer
 
 
-class YouLikeProductCreate(generics.CreateAPIView):
+class YouLikeProductCreate(APIView):
     model = YouLikeProduct
-    serializer_class = YouLikeProductSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = (permissions.IsAuthenticated,)
 
-    def create(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
+        product = get_object_or_404(Product, id=self.kwargs.get("product_id"))
         user = request.user
-        print(request)
-        product_id = request.data["product"]
-        product = Product.objects.get(id=product_id)
-        YouLikeProduct.objects.create(user=user, product=product)
-        return Response({"message": "Product added to your like list"}, status=status.HTTP_201_CREATED)
+        if not user.is_authenticated:
+            raise serializers.ValidationError("User is not authenticated")
+        if YouLikeProduct.objects.filter(user=user, product=product).exists():
+            raise serializers.ValidationError("The record already exists")
+        saved = YouLikeProduct.objects.create(user=user, product=product)
+        return Response({"id": saved.id}, status=status.HTTP_201_CREATED)
