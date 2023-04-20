@@ -16,3 +16,5 @@ class ProductDetailView(generics.RetrieveAPIView):
     def get(self, request, *args, **kwargs):
         product = self.get_object()
         return Response(self.get_serializer(product).data)
+
+

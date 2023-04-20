@@ -15,19 +15,9 @@ class RelatedProductView(generics.ListAPIView):
         product = Product.objects.get(id=product_id)
         category = product.category
         queryset = (
-            # Product.objects.filter(category=category) all products in the same category
             Product.objects.filter(category=category).exclude(id=product_id)
-            # Product.objects.filter(Q(category=category))
         )
         return queryset
-    queryset = Product.objects.all()
-    serializer_class = RelatedProductSerializer
 
-    def get_queryset(self):
-        category = self.kwargs.get("category__parent_category   ")
-        print(category)
-        if category:
-            return Product.objects.filter(category__parent_category=category)
 
-        else:
-            return Product.objects.none()
+
