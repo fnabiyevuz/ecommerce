@@ -2,15 +2,15 @@ from typing import Any, Dict  # noqa: F401
 
 JAZZMIN_SETTINGS = {
     # title of the window (Will default to current_admin_site.site_title if absent or None)
-    "site_title": "Default Title",
+    "site_title": "Ecommerce Title",
     # Title on the login screen (19 chars max) (defaults to current_admin_site.site_header if absent or None)
-    "site_header": "Default Header",
+    "site_header": "Ecommerce Header",
     # Title on the brand (19 chars max) (defaults to current_admin_site.site_header if absent or None)
-    "site_brand": "Default Brand",
+    "site_brand": "Ecommerce Brand",
     # Logo to use for your site, must be present in static files, used for brand on top left
-    "site_logo": "logos/admin_logo_big.png",
+    # "site_logo": "logos/admin_logo_big.png",
     # Logo to use for your site, must be present in static files, used for login form logo (defaults to site_logo)
-    "login_logo": "logos/admin_logo_big.png",
+    # "login_logo": "logos/admin_logo_big.png",
     # Logo to use for login form in dark themes (defaults to login_logo)
     # "login_logo_dark": 'img/kia_logo.png',
     # CSS classes that are applied to the logo above
@@ -18,9 +18,9 @@ JAZZMIN_SETTINGS = {
     # Relative path to a favicon for your site, will default to site_logo if absent (ideally 32x32 px)
     "site_icon": "logos/admin_logo.png",
     # Welcome text on the login screen
-    "welcome_sign": "Default Welcome",
+    "welcome_sign": "Ecommerce Welcome",
     # Copyright on the footer
-    "copyright": "Default copyright",
+    "copyright": "Ecommerce copyright",
     # List of model admins to search from the search bar, search bar omitted if excluded.
     # If you want to use a single search field you don't need to use a list, you can use a simple string
     "search_model": [

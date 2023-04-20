@@ -37,7 +37,7 @@ class CartItem(BaseModel):
     product = models.ForeignKey(
         "product.Product", verbose_name=_("Product"), on_delete=models.CASCADE, related_name="product_items"
     )
-    quantity = models.PositiveIntegerField(verbose_name=_("Quantity"), default=1)
+    quantity = models.IntegerField(verbose_name=_("Quantity"), default=1)
     price = models.DecimalField(verbose_name=_("Price"), max_digits=12, decimal_places=2, default=0)
 
     def __str__(self):

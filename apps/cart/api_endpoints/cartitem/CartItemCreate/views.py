@@ -17,7 +17,7 @@ class CartItemCreateAPIView(generics.CreateAPIView):
 
     def create(self, request, *args, **kwargs):
         cart = get_cart(request)
-        request.data["cart"] = cart
+        request.data["cart"] = cart.id
         serializer = CartItemCreateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
