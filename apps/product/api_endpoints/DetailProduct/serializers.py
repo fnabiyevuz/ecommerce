@@ -6,14 +6,14 @@ from apps.product.models import Product, ProductImage
 class ImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProductImage
-        fields = ('id', 'image')
+        fields = ("id", "image")
 
 
 class ProductDetailSerializer(serializers.ModelSerializer):
     images = serializers.SerializerMethodField("get_images")
 
     def get_images(self, obj):
-        return [self.context['request'].build_absolute_uri(image.image.url) for image in obj.images.all()]
+        return [self.context["request"].build_absolute_uri(image.image.url) for image in obj.images.all()]
 
     class Meta:
         model = Product
@@ -41,5 +41,3 @@ class ProductDetailSerializer(serializers.ModelSerializer):
             "condition",
             "view_count",
         )
-
-
