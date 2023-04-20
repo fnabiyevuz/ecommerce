@@ -24,8 +24,8 @@ class LoginForm(AuthenticationForm):
         return cleaned_data
 
 
-# admin.site.login_form = LoginForm
-admin.site.login_template = "admin/login.html"
+admin.site.login_form = LoginForm
+admin.site.login_template = "login.html"
 
 
 urlpatterns = [
