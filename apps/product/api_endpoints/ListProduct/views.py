@@ -2,6 +2,7 @@ from django.db.models import Q
 from django_filters import rest_framework as django_filters
 from rest_framework import filters, generics
 
+from apps.account.api_endpoints.profile.DeleteProfile import permissions
 from apps.product.models import Category, Product
 
 from .serializers import CategorySerializer, ProductListSerializer
@@ -47,3 +48,10 @@ class ListCategoryView(generics.ListAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
     search_fields = ["name"]
+
+
+
+
+
+
+
