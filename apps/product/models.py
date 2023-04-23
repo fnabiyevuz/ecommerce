@@ -6,10 +6,8 @@ from django.utils.translation import gettext_lazy as _
 
 from apps.common.models import BaseModel
 
-# from apps.account.models import Account
-from .choisen import CONDITION, CurrencyType
 
-# User = get_user_model()
+from .choisen import CONDITION, CurrencyType, SUPPLIER_TYPE
 
 
 class Category(BaseModel):
@@ -57,7 +55,7 @@ class Product(BaseModel):
     customization = models.CharField(max_length=255, verbose_name=_("Customization"))
     protection = models.CharField(max_length=255, verbose_name=_("Protection"))
     warranty = models.CharField(max_length=255, verbose_name=_("Warranty"))
-    supplier = models.OneToOneField("account.Account", on_delete=models.CASCADE, verbose_name=_("Supplier"))
+    supplier = models.ForeignKey("account.Account", on_delete=models.CASCADE, verbose_name=_("Supplier"))
     manufacturer = models.CharField(max_length=255, verbose_name=_("Manufacturer"))
     brand = models.CharField(max_length=255, verbose_name=_("Brand"))
     company = models.ForeignKey(Company, on_delete=models.CASCADE, verbose_name=_("Company"))
@@ -112,7 +110,6 @@ class Review(BaseModel):
     rating = models.FloatField(
         null=True, blank=True, validators=[MinValueValidator(0), MaxValueValidator(5)], default=0
     )
-    # reply = models.ForeignKey("self", on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return str(self.user)
