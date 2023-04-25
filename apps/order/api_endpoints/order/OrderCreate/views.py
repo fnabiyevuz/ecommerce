@@ -19,7 +19,7 @@ class OrderCreateAPIView(generics.CreateAPIView):
     """
 
     def create(self, request, *args, **kwargs):
-        cart = Cart.objects.get(session_key=request.data["session_key"])
+        cart = Cart.objects.get(session_key=request.data["session_key"], status=CartStatusType.NEW)
         coupon = Coupon.objects.get(id=request.data["coupon"])
         if coupon.is_available:
             if coupon.discount_type == CouponType.PERCENT:
@@ -42,6 +42,15 @@ class OrderCreateAPIView(generics.CreateAPIView):
         serializer.is_valid(raise_exception=True)
         cart.status = CartStatusType.ORDERED
         cart.save()
+        for item in cart.cart_items.all():
+            if item.quantity <= item.product.quantity:
+                item.product.quantity -= item.quantity
+                item.product.save()
+            else:
+                item.quantity = item.product.quantity
+                item.product.quantity = 0
+                item.product.save()
+                item.save()
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)

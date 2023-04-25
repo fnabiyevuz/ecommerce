@@ -5,6 +5,7 @@ from apps.cart.api_endpoints.cartitem.CartItemCreate.serializers import (
     CartItemCreateSerializer, CartItemCreateShortSerializer)
 from apps.cart.models import CartItem
 from apps.common.utils import get_cart
+from apps.product.models import Product
 
 
 class CartItemCreateAPIView(generics.CreateAPIView):
@@ -18,6 +19,12 @@ class CartItemCreateAPIView(generics.CreateAPIView):
     def create(self, request, *args, **kwargs):
         cart = get_cart(request)
         request.data["cart"] = cart.id
+        product = Product.objects.get(id=request.data['product'])
+        if product.quantity >= 1:
+            product.quantity -= 1
+            product.save()
+        else:
+            raise Exception("Sorry, We have not this product.")
         serializer = CartItemCreateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)

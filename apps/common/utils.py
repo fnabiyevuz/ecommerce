@@ -38,3 +38,14 @@ def my_order(request):
     else:
         orders = Order.objects.filter(cart__session_key=get_session_key(request))
     return orders
+
+
+def my_cart(request):
+    """
+    Get user's cart
+    """
+    if request.user.is_authenticated:
+        orders = Cart.objects.filter(user=request.user)
+    else:
+        orders = Cart.objects.filter(session_key=get_session_key(request))
+    return orders

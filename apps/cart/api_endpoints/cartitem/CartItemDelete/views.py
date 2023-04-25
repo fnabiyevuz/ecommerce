@@ -3,6 +3,7 @@ from rest_framework.response import Response
 
 from apps.cart.api_endpoints.cartitem.CartItemDelete.serializers import \
     CartItemDeleteSerializer
+from apps.cart.choices import CartStatusType
 from apps.cart.models import CartItem
 from apps.common.utils import get_cart
 
@@ -18,7 +19,9 @@ class CartItemDeleteAPIView(generics.DestroyAPIView):
     def destroy(self, request, *args, **kwargs):
         cart = get_cart(request)
         instance = self.get_object()
-        if instance.cart == cart:
+        if instance.cart == cart and instance.cart.status == CartStatusType.NEW:
+            instance.product.quantity += instance.quantity
+            instance.product.save()
             self.perform_destroy(instance)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
