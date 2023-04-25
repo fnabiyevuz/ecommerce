@@ -22,6 +22,12 @@ class CartItemUpdateAPIView(generics.UpdateAPIView):
         partial = kwargs.pop("partial", False)
         instance = self.get_object()
         if instance.cart == cart:
+            if instance.product.quantity + instance.quantity >= request.data['quantity']:
+                instance.product.quantity = instance.product.quantity + instance.quantity - request.data['quantity']
+                instance.product.save()
+            else:
+                request.data['quantity'] = instance.product.quantity + instance.quantity
+
             serializer = self.get_serializer(instance, data=request.data, partial=partial)
             serializer.is_valid(raise_exception=True)
             self.perform_update(serializer)

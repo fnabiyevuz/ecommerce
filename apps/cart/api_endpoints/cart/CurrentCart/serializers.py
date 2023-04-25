@@ -6,8 +6,4 @@ from apps.cart.models import Cart
 class CartDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Cart
-        fields = (
-            "id",
-            "status",
-            "session_key",
-        )
+        fields = ("id", "status", "total", "session_key")

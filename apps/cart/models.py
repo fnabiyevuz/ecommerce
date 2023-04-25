@@ -15,7 +15,7 @@ class Cart(BaseModel):
         blank=True,
         null=True,
     )
-    session_key = models.CharField(verbose_name=_("Session key"), max_length=255, blank=True, null=True, unique=True)
+    session_key = models.CharField(verbose_name=_("Session key"), max_length=255, blank=True, null=True)
     status = models.CharField(
         verbose_name=_("Cart status"), max_length=10, choices=CartStatusType.choices, default=CartStatusType.NEW
     )
